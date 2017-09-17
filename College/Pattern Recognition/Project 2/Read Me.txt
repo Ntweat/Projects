@@ -1,0 +1,5 @@
+To run the project
+1. Keep all the files in one directory
+2. Run proj.m only
+3. proj.m calls other programs.
+4. The project has to be trained again.
