@@ -1,0 +1,39 @@
+---
+title: "Examine Prosper in R"
+output: html_notebook
+---
+Examine and Summarize Data Using R - Prosper
+=============================================
+**By: Saurabh Hinduja**
+  
+---
+  
+## Introduction
+This section contains information about the dataset selected, reasons why the dataset was selected 
+
+*Dataset Selected:* Propser
+
+**What is Propser**
+
+There are many peer to peer networks, like file sharing, meeting new friends and many more. Prosper is America's first and leading peer-to-peer lending network. In this kind of network, lenders research borrowers and lend them money directly. 
+
+Prosper works because it has lower rate of interest than banks and multiple lenders can contribute to the same borrower. Therefore, it is lucrative for borrowers because it has lower rate of interest and lenders like it cause it reduces their risk and can contribute towards a bigger loan amount. 
+
+**Why Prosper dataset**
+
+I have used a lot of peer-to-peer networks, usually for file sharing or for meeting new people. When I saw Prosper on the Udacity website, I was intrigued on how peer-to-peer network can be used for financial transactions (mainly borrowing/lending money). I wanted tofind out how Prosper authenticates borrowers and keeps track of all the transactions. A few questions I had were: What is the repayment rate? Is there any failure to return? What factors which affect the credibility of the borrower? Factors which influenced default?
+
+## Dataset Overview
+This dataset is part of [Udacity data set options] (https://docs.google.com/document/d/1qEcwltBMlRYZT-l699-71TzInWfk4W9q5rTCSvDVMpc/pub?embedded=true) for the assignment in R which is part of their Data Analysis Nanodegree. 
+
+This data set contains 113,937 loans with 81 variables on each loan, including loan amount, borrower rate (or interest rate), current loan status, borrower income, borrower employment status, borrower credit history, and the latest payment information.
+
+
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file).
