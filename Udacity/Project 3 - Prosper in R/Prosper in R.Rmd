@@ -29,10 +29,244 @@ This dataset is part of [Udacity data set options] (https://docs.google.com/docu
 This data set contains 113,937 loans with 81 variables on each loan, including loan amount, borrower rate (or interest rate), current loan status, borrower income, borrower employment status, borrower credit history, and the latest payment information.
 
 
+### Steps for Data analysis
+Below are the steps which will be followed for analysing the Prosper dataset:
+
+1. Data Overview
+2. Analysis
+3. Final plots and summary
+
+An indepth description of the variabls are available from [Udacity](https://docs.google.com/spreadsheets/d/1gDyi_L4UvIrLTEC6Wri5nbaMmkGmLQBk-Yx3z0XDEtI/edit). After spending considerable amount of time studying the variables, 20 variables were selected for further analysis.
+
+### Variable of interest
+
+The following are the features of interest for this data analysis:
+
+**1. Term** Length of the loan expressed in months
+
+**2. LoanStatus** The current status of the loan: Cancelled,  Chargedoff, Completed, Current, Defaulted, FinalPaymentInProgress, PastDue. The PastDue status will be accompanied by a delinquency bucket.
+
+**3. BorrowerState** The two letter abbreviation of the state of the address of the borrower at the time the Listing was created. 
+
+**4. ListingCategory** The category of the listing that the borrower selected when posting their listing: 0 - Not Available, 1 - Debt Consolidation, 2 - Home Improvement, 3 - Business, 4 - Personal Loan, 5 - Student Use, 6 - Auto, 7- Other, 8 - Baby&Adoption, 9 - Boat, 10 - Cosmetic Procedure, 11 - Engagement Ring, 12 - Green Loans, 13 - Household Expenses, 14 - Large Purchases, 15 - Medical/Dental, 16 - Motorcycle, 17 - RV, 18 - Taxes, 19 - Vacation, 20 - Wedding Loans 
+
+**5. CreditScoreRangeLower** The lower value representing the range of the borrower's credit score as provided by a consumer credit rating agency. 
+
+**6. CreditScoreRangeUpper** The upper value representing the range of the borrower's credit score as provided by a consumer credit rating agency. 
+
+**7. BankcardUtilization** The percentage of available revolving credit that is utilized at the time the credit profile was pulled.
+
+**8. IncomeRange** The income range of the borrower at the time the listing was created.
+
+**9. LoanOriginalAmount** The origination amount of the loan.
+
+**10. Investors** The number of investors that funded the loan.
+
+**11. ListingCreationDate** The date the listing was created.
+
+**12. Occupation** The Occupation selected by the Borrower at the time they created the listing.
+
+**13. IsBorrowerHomeowner** A Borrower will be classified as a homowner if they have a mortgage on their credit profile or provide documentation confirming they are a homeowner.
+
+**14. BorrowerAPR** The Borrower's Annual Percentage Rate (APR) for the loan.
+
+**15. BorrowerRate** The Borrower's interest rate for this loan. 
+
+**16. Recommendations** Number of recommendations the borrower had at the time the listing was created.
+
+**17. TotalProsperLoans** Number of Prosper loans the borrower at the time they created this listing. This value will be null if the borrower had no prior loans. 
+
+**18. DebtToIncomeRatio** The debt to income ratio of the borrower at the time the credit profile was pulled. This value is Null if the debt to income ratio is not available. This value is capped at 10.01 (any debt to income ratio larger than 1000% will be returned as 1001%).
+
+**19. StatedMonthlyIncome** The monthly income the borrower stated at the time the listing was created.
+
+**20. EmploymentStatus** The employment status of the borrower at the time they posted the listing.
+
+
+There were more varaibles of interest, but they were not consistent (For example: CreditGrade was availale only pre-2009)
+
+
 
 ```{r}
-plot(cars)
+library(ggplot2) 
+library(dplyr)
+library(maps)
+library(mapproj)
+library(gridExtra)
+library(GGally)
+
+prosper_data <- read.csv("prosperLoanData.csv")
 ```
+
+
+## Exploratory Data Analysis 
+
+Exploratory data analysis is divided into 3 sections, depending on number of data variables taken for analysis. (Univariable, Bivariate and Multivariate)
+
+The first step for exploratory data analysis is to check verify that the dataset has 81 variable and 113,937 variable. Also, we will be subsetting the dataset and forming a new dataset which will just have the variables for our interest. 
+
+Verify the dimensions 
+```{r}
+dim(prosper_data)
+```
+
+After verification that the dataset is complete, we will now subset the dataset
+```{r}
+
+# First we create a list of variables to subset
+
+VarstoSubset <- c("Term","LoanStatus","BorrowerState","ListingCategory..numeric.",
+               "CreditScoreRangeLower","CreditScoreRangeUpper",
+               "BankcardUtilization","IncomeRange", "TotalProsperLoans",
+               "LoanOriginalAmount", "Investors","ListingCreationDate",
+               "Occupation","IsBorrowerHomeowner","BorrowerAPR","BorrowerRate",
+               "Recommendations","DebtToIncomeRatio", "StatedMonthlyIncome",
+               "EmploymentStatus")
+
+## Now we create the data subset
+
+prosperSubSet <- subset(prosper_data, select = VarstoSubset)
+
+## Check the completeess of the data
+
+dim(prosperSubSet)
+
+## Check the Variables and their data types
+
+str(prosperSubSet)
+
+
+```
+
+We verified that the subset has 113937 rows and 20 variables alpng with their data types. 
+
+## Creating new data variables 
+
+Before we continue with our data analysis we need to define who is a borrower in default. The propser dataset has done a very good job in catagorizing the dataset, but if dig into the definations of "Chargedoff" and "Defaulted" we find that their are still a few more rows which should fall into defaulted (For example: people who Past Due(>61 days) )
+
+**Borrowers in Default**
+
+Creating a new variable DefaultBorrowers (1 - Person is in Default, 0 - Not in Default)
+```{r}
+prosperSubSet$DefaultBorrowers <- ifelse(
+                                        prosperSubSet$LoanStatus == "Defaulted" |
+                                        prosperSubSet$LoanStatus == "Chargedoff" |
+                                        prosperSubSet$LoanStatus == "Past Due (61-90 days)" |
+                                        prosperSubSet$LoanStatus == "Past Due (91-120 days)"| 
+                                        prosperSubSet$LoanStatus == "Past Due (>120 days)",
+                                        
+                                        1,0)
+
+str(prosperSubSet)
+
+```
+
+
+## Univariate Data Analysis
+
+The first thing we will see that if there there were some economic crisis which caused the an increase in loan defaults. 
+
+```{r}
+# Year in which loan was taken
+
+prosperSubSet$LoanTakenYear <- format (
+                                  as.Date(prosperSubSet$ListingCreationDate), "%Y"
+)
+```
+
+```{r}
+# Plot the new variable
+ggplot(prosperSubSet, aes(prosperSubSet$LoanTakenYear, fill = factor(DefaultBorrowers))) + geom_bar() + scale_fill_discrete( "Kind of borrower", labels = c ("Good Borrowers", "Default Borrowers")) + ggtitle("Borrowers over the years") + labs(x = "Number of Loans through the years")
+```
+
+There are few important things to note here: 
+
+1. The ratio of defaulters was high in 2007,2008
+
+2. There was a sudden dip in number of loans taken in 2009. After a bit of research we can see that there was an economic depression in 2009. 
+
+3. There was a exponential increase number of loans taken fron 2009 to 2013.
+
+4. There was a dip again in 2014. Again, a bit of searching showed that there was an economic slowdown in 2014
+
+5. There was a a linear increase in  number of defualters from 2009 to 2012
+
+It should be kept in mind that the above figures are only on new loans taken in that year. It does not include the on-going loans during that period. 
+
+**Loan Term and Loan Status**
+
+Now we should look into continuing loans. The status of the loan and its status.
+
+For this we will break down terms into 4 terms.
+
+1. Start -  0 months
+
+2. 1 year - 12 months
+
+3. 3 years - 36 months
+
+4. 5 years - 60 months
+
+```{r}
+# Check summary of loan terms 
+summary(prosperSubSet$Term)
+
+#Check summary of default borrowers
+summary(prosperSubSet$DefaultBorrowers)
+
+#Check summary of Loan status
+summary(prosperSubSet$LoanStatus)
+
+
+#Create graphs
+ggplot(prosperSubSet, aes(Term, fill = factor(DefaultBorrowers))) +geom_bar() + scale_x_continuous(breaks = c(0,12,36,60)) + scale_fill_discrete("Kind of Borrowers", labels = c("Good Borrowers", "Default Borrowers")) + ggtitle("Loan Terms") + labs(x = "Loan Terms")
+
+```
+
+From the summary we can observe the following:
+1. Median length of loan is 36 months
+2. 15% of the borrowers are in default
+
+
+**Loan amount and investors** 
+
+Now let us check the details on the original loan amount and investors interested in giving loans. 
+
+```{r}
+#Check summary for laoan amount
+summary(prosperSubSet$LoanOriginalAmount)
+
+#Check summary for average investors 
+summary(prosperSubSet$Investors)
+
+#Plot loan ammount
+loanterm <- ggplot(prosperSubSet, aes(LoanOriginalAmount, fill = factor(DefaultBorrowers))) +
+  scale_fill_discrete("Kind of Borrowers", labels = c ("Good Borrowers", "Default Borrowers")) +
+  ggtitle("Loan Amount") + labs(x = "Loan Amount") 
+  
+loanterm + geom_histogram(binwidth = 1000) 
+
+
+
+```
+From the above information it can be noted that:
+1. The median loan amount is $6,500. Average loan amount is $8,337. The loan range is $1000 to $35,000 with a third quantile at $12,000.
+2. Median number of investors for the loan are 44, with third quantile on 115 and maximum number of investors being $1189, this could be an outlier. 
+3. The graph for borrowers (good and default) is right skewed. 
+4. The high number of borrowers at $10,000 , $15,000, $20,000, $25,000 pull the average to be higher than median
+
+Now, let us look deeper into the graph and try to eliminate some outliers by examining just 95% of the data. 
+
+```{r}
+
+loanterm +  
+  geom_histogram(binwidth = 500)  + scale_x_continuous( limits = c (500, quantile(prosperSubSet$LoanOriginalAmount, 0.95)), 
+                      breaks = c(0,2000,4000,6000,8000,10000,12000,14000,16000,18000,20000))
+
+```
+
+We can see that below the mean, that is, $8,337 people request in the all kinds of amounts in the range. But, above $8,337 people request in "whole" values, of $10,000 and $15,000.
+
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
 
