@@ -282,7 +282,9 @@ plotincomerange <- ggplot(prosperSubSet, aes(IncomeRange, fill = factor(DefaultB
                 "$75,000-99,999", "$100,000+")) +
   geom_bar() +
   scale_fill_discrete(labels = c("Good Borrowers", "Bad Borrowers")) +
-  ggtitle("Income Range") + labs(x = "Income Range") 
+  ggtitle("Income Range") + labs(x = "Income Range") +
+   theme(axis.text.x = element_text(angle = 90))
+
 
 plotincomerange
   
@@ -306,9 +308,10 @@ summary(prosperSubSet$BorrowerState)
 #Inital graph of borrowers
 initialstateplot <- ggplot(na.omit(prosperSubSet), aes(BorrowerState, fill = factor(DefaultBorrowers))) +
   geom_bar(position = "dodge") +
-  scale_y_log10()+
     scale_fill_discrete(labels = c("Good Borrowers", "Bad Borrowers")) +
-  ggtitle("Borrowers State") + labs(x = "Borrowers State")
+  ggtitle("Borrowers State") + labs(x = "Borrowers State") +
+   theme(axis.text.x = element_text(angle = 90))
+
 initialstateplot
 
 #Mapping States to a map
@@ -327,7 +330,7 @@ bad_borrow_state <- prosperSubSet %>%
 
 DefaultMap <- ggplot() +
   geom_map(data = usmap, map =usmap, aes(x = long, y = lat, map_id = region, label = region))+
-  geom_map(data = na.omit(bad_borrow_state), map=us, aes(fill = count, map_id = BorrowerStateFullName)) +
+  geom_map(data = na.omit(bad_borrow_state), map=usmap, aes(fill = count, map_id = BorrowerStateFullName)) +
   geom_text(data = usstates, aes(x = x, y = y, label = state.abb, group = NULL)) +
   scale_fill_continuous(low ='blue', high='red', guide = 'colorbar')+
   labs(x = "Bad Borrowers", y=NULL) +
@@ -335,6 +338,145 @@ DefaultMap <- ggplot() +
 
 DefaultMap
 ```
+From the bar graph it can be seen:
+1. California has the maximum number of borrower, 14717 and it can pull all the statistics towards it.
+2. Second highest number of borrowers are in Texas which has less than half of California, 6842
+
+From the map it can be seen:
+1. California stands out, that means it has the highest number of Bad borrowers, but this can also be due to the fact that California also has the highest number of total borrowers
+2. Other Sates which stand out are Texas, Illonois, Florida and Georgia. 
+3. Texas, Florida and Illonois also have high number of borrower nearly 6000
+4. Georgia has high number of borrowers and lower number of total borrowers. 
+5. Central America has lowest number of borrower and bad borrowers. Reasons for this may be lower cost of living, low population. 
+6. North Dakota and Wyoming have least number of  borrowers
+
+**Listing Catagory**
+Analyzing the purpose for which the loan was taken out. 
+
+```{r}
+#Create a variable for Listing catagory 
+ListCat <- c("Not Available", "Debt Consolidation", "Home Improvement", 
+                      "Business", "Personal Loan", "Student Use", "Auto", "Other", 
+                      "Baby&Adoption", "Boat", "Cosmetic Procedure", 
+                      "Engagement Ring", "Green Loans","Household Expenses", 
+                      "Large Purchases", "Medical/Dental", "Motorcycle",
+                      "RV", "Taxes", "Vacation", "Wedding Loans")
+#Mapping the new variable
+prosperSubSet$ListingCategoryName <- ListCat[(prosperSubSet$ListingCategory..numeric.)+1]
+
+
+
+#Plotting the Listing Category 
+ListCatGraph <- ggplot(prosperSubSet, aes(prosperSubSet$ListingCategoryName, fill = factor(DefaultBorrowers))) +
+    geom_bar() +
+  scale_fill_discrete("Borrowers", labels = c("Good Borrowers", "Bad Borrowers")) +
+  ggtitle("Income Range") + labs(x = "Income Range") +
+  theme(axis.text.x = element_text(angle = 90))
+
+# Debit Consolidation overshadoewed other values due to which can't observe anything adding log
+ListCatGraph + scale_y_log10()
+ListCatGraph
+
+```
+From the above graphs it can be seen that:
+1. Highest number of borrowers in Debt Consolidation, followed by Not Available
+2. Debt consolidation and Not available have the same number of Bad borrowers, but Not Available has lower number of borrrowers. Therefore, Not available has higher percentage of bad borrowers. 
+3. None of the borrowers who borrowed money for RV are in default. 
+4. Debt consolidation are people who have a lot of loan from a lot of debt from multiple sources.
+
+##Bivariate Analysis
+Now to look at default borrowers let us dive into bivariate analysis 
+
+**Debt to Income Ratio and Stated Income**
+
+Let us look at the debt to income trtio of borrowers across the prosper dataset. We are interested in knowing if people wiht high income take higher loans or other way round and what are case of them being in default. 
+FOr this we will make a scatter plot and consider only perople with income less than $25k
+
+```{r}
+ggplot(prosperSubSet, aes(StatedMonthlyIncome, 
+                         DebtToIncomeRatio, 
+                         colour = factor(DefaultBorrowers))) +
+  geom_point(alpha = 0.5) +
+  scale_x_continuous(limits = c(0,25000)) +
+  #scale_y_continuous(limits = c(0,10)) +
+  scale_y_log10() +  
+  scale_color_discrete(labels = c("Good Borrowers", "Bad Borrowers")) +
+  geom_density2d()
+```
+The log scale displays some interesting characteristics:
+1. Most have debt-to-income ratio greater than 0.01
+2. There are some outliers with debt-to-income ratio of 0
+3. The contour lines (rings) show  a high concentration of bad borrowers. 
+4. Changing the y limitds show us that a lot of the borrowers have an income of zero and are on Y axis all the way to 10.
+5.It suggests a negative correlation between income and debt
+
+**Debt to Income and Interest Rate**
+Let us see what relationship does Debt-to-interest have with Interest rate
+
+```{r}
+ggplot(prosperSubSet, aes( DebtToIncomeRatio, BorrowerRate)) +
+  geom_point(alpaha =0.1) + scale_x_log10()
+```
+
+Points to be noted
+1.  Positive correlation between Borrower rate and Debt-to-income ratio
+
+**Listing Category and Loan Amount**
+Creating a few box blots ti examine the loan category, loan amount and borrowing rate. 
+
+```{r}
+ggplot(prosperSubSet, aes(ListingCategoryName, 
+                         LoanOriginalAmount, 
+                         group = ListingCategoryName)) +
+  geom_boxplot() +
+  theme(axis.text.x = element_text(angle = 90))
+
+
+  
+```
+
+From the above graph it can be noted that:
+1. Debt consolidation and Baby Adoption have the highest loan amount
+2. Lowest loan amounts are for Auto, Household expenses, Motorcycle, Personal loan and Student use.
+
+**Loan Category and Borrower Rate**
+Box plot for Loan Category and Borrower rate 
+
+```{r}
+ggplot(prosperSubSet, aes(ListingCategoryName, BorrowerRate, group = ListingCategoryName))+
+  geom_boxplot()+
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+Average borrowing rate is between 0.15 and 0.25 acroess all categories
+
+
+**Loan Term and Loan Amount**
+Box plot between Loan term and loan amount. 
+
+```{r}
+ggplot(prosperSubSet, aes(Term, LoanOriginalAmount, group = Term))+
+  geom_boxplot() +
+  scale_x_continuous(breaks = c(0,12,36,60))  #Added later to make graph better
+```
+Points to note:
+1. The average loan amount for 12 months term is lowest followed by 36 and 60. This is expected as it takes longer to return a bigger loan amount. 
+
+**Loan Amount and Bankcard Utilization**
+Let us see how do people utalize their bankcard
+
+```{r}
+ggplot(prosperSubSet, aes(LoanOriginalAmount, BankcardUtilization))+
+  geom_point(alpha=0.1, size=0.75,position = "jitter")+
+  scale_y_log10()
+```
+
+Things to note:
+1. Card utilization is higher for people taking out a lower loan
+2. Spikes in plot at 10K, 15K, 20K, 25K 35K . People might be taking loand of this amount more
+
+
+
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
 
