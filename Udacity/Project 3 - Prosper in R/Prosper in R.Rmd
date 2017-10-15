@@ -269,6 +269,7 @@ We can see that below the mean, that is, $8,337 people request in the all kinds 
 
 
 **Income Range**
+
 Analyzing the income range of borrowers. 
 
 ```{r}
@@ -351,6 +352,7 @@ From the map it can be seen:
 6. North Dakota and Wyoming have least number of  borrowers
 
 **Listing Catagory**
+s
 Analyzing the purpose for which the loan was taken out. 
 
 ```{r}
@@ -411,6 +413,7 @@ The log scale displays some interesting characteristics:
 5.It suggests a negative correlation between income and debt
 
 **Debt to Income and Interest Rate**
+
 Let us see what relationship does Debt-to-interest have with Interest rate
 
 ```{r}
@@ -422,6 +425,7 @@ Points to be noted
 1.  Positive correlation between Borrower rate and Debt-to-income ratio
 
 **Listing Category and Loan Amount**
+
 Creating a few box blots ti examine the loan category, loan amount and borrowing rate. 
 
 ```{r}
@@ -440,6 +444,7 @@ From the above graph it can be noted that:
 2. Lowest loan amounts are for Auto, Household expenses, Motorcycle, Personal loan and Student use.
 
 **Loan Category and Borrower Rate**
+
 Box plot for Loan Category and Borrower rate 
 
 ```{r}
@@ -452,6 +457,7 @@ Average borrowing rate is between 0.15 and 0.25 acroess all categories
 
 
 **Loan Term and Loan Amount**
+
 Box plot between Loan term and loan amount. 
 
 ```{r}
@@ -463,6 +469,7 @@ Points to note:
 1. The average loan amount for 12 months term is lowest followed by 36 and 60. This is expected as it takes longer to return a bigger loan amount. 
 
 **Loan Amount and Bankcard Utilization**
+
 Let us see how do people utalize their bankcard
 
 ```{r}
@@ -533,7 +540,8 @@ A few observations from the above graphs:
 3. At higher loand amount like 25K even borrowers with high credit score of 700+ are bad borrowers
 4. Averga loan amount for good borrower (Credit score above 700) is 20K
 
-**Loan Amount, Year and Income Range**
+**Loan Amount, Year and Income Range** 
+
 Let us see if there is any difference in Loan amount taken by an income group over the years. This can show if there is any effect of inflation. 
 
 ```{r}
