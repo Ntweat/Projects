@@ -384,7 +384,7 @@ From the above graphs it can be seen that:
 3. None of the borrowers who borrowed money for RV are in default. 
 4. Debt consolidation are people who have a lot of loan from a lot of debt from multiple sources.
 
-###Bivariate Analysis
+### Bivariate Analysis
 Now to look at default borrowers let us dive into bivariate analysis 
 
 **Debt to Income Ratio and Stated Income**
@@ -488,7 +488,7 @@ ggplot(prosperSubSet, aes(LoanOriginalAmount, Investors)) +
 1. This shoows a positive relationship between the amount and number of investors
 2. Number of investors drop when amount increased from 25K
 
-###Multivariate Analysis
+### Multivariate Analysis
 
 Now let us do some multivariate analysis to see how they affect each other and to rule out any correlations which might look like causation. 
 
@@ -571,7 +571,8 @@ Observations
 3. No bad borrowes in 2014 (incomplete data??)
 
 
-##
+## Final Plots and Summary
+
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
 
