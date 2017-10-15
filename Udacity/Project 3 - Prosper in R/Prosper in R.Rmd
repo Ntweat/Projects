@@ -162,7 +162,7 @@ str(prosperSubSet)
 ```
 
 
-## Univariate Data Analysis
+### Univariate Data Analysis
 
 The first thing we will see that if there there were some economic crisis which caused the an increase in loan defaults. 
 
@@ -384,7 +384,7 @@ From the above graphs it can be seen that:
 3. None of the borrowers who borrowed money for RV are in default. 
 4. Debt consolidation are people who have a lot of loan from a lot of debt from multiple sources.
 
-##Bivariate Analysis
+###Bivariate Analysis
 Now to look at default borrowers let us dive into bivariate analysis 
 
 **Debt to Income Ratio and Stated Income**
@@ -476,7 +476,102 @@ Things to note:
 2. Spikes in plot at 10K, 15K, 20K, 25K 35K . People might be taking loand of this amount more
 
 
+**Loan Amount and Investore**
 
+Let us analyse if there is relation between Loan Amount and Investors 
+
+```{r}
+ggplot(prosperSubSet, aes(LoanOriginalAmount, Investors)) +
+  geom_point(alpah =0.2, position ="jitter") 
+```
+
+1. This shoows a positive relationship between the amount and number of investors
+2. Number of investors drop when amount increased from 25K
+
+###Multivariate Analysis
+
+Now let us do some multivariate analysis to see how they affect each other and to rule out any correlations which might look like causation. 
+
+To perform multivariate analysis we have to first calculate the pearson correlations. 
+
+
+**Pearsons Correlations**
+```{r}
+ggcorr(prosperSubSet, label = TRUE, label_size = 2, hjust = 0.8, size = 2.5, angle =-10)
+
+```
+
+
+Points to be noted from the correlation 
+1. Stong correlation (-0.5) between Credit Score and Borrower Rate
+2. Correlation between credit score and default borrower of -0.3
+3. Strong correlation between loan amount and number of investors 0.4
+4. Correlation between Term and Loan Amount is 0.3 (This was predicted earlier)
+5. If borrower  APR is high number of investors is low (-0.3)
+
+**Credit Score, Loan Amount, Type of Borrower**
+
+Let us see if we can find some correlation on these 3 variables. 
+
+```{r}
+CLG1 <- ggplot(subset(prosperSubSet, DefaultBorrowers == 1), aes(CreditScoreRangeUpper, LoanOriginalAmount)) +
+  geom_point(alpha = 0.2, color = "red")+
+  ggtitle("Bad Borrowers")
+
+CLG2 <- ggplot(subset(prosperSubSet, DefaultBorrowers == 0), aes(CreditScoreRangeUpper, LoanOriginalAmount)) +
+  geom_point(alpha = 0.2, color = "green")+
+  ggtitle("Good Borrowers")
+
+grid.arrange(CLG1, CLG2, nrow=1)
+
+
+```
+
+A few observations from the above graphs:
+1. No bad borrowers have taken loan above 25k
+2. Lower the credit score, lower the credit score, higher change of borrower being bad. Usually this is below 10K
+3. At higher loand amount like 25K even borrowers with high credit score of 700+ are bad borrowers
+4. Averga loan amount for good borrower (Credit score above 700) is 20K
+
+**Loan Amount, Year and Income Range**
+Let us see if there is any difference in Loan amount taken by an income group over the years. This can show if there is any effect of inflation. 
+
+```{r}
+positions <-  c ("Not employed", "$0", "Not displayed", 
+                "$1-24,999", "$25,000-49,999", "$50,000-74,999",
+                "$75,000-99,999", "$100,000+")
+
+prosperSubSet <- transform(prosperSubSet, 
+               IncomeRange = factor(IncomeRange, 
+                                    levels = positions, 
+                                    labels = positions))
+ggplot(prosperSubSet, aes(LoanTakenYear, LoanOriginalAmount)) + geom_boxplot()+
+         facet_grid(IncomeRange ~ .)
+```
+
+Interesting observations
+1. Average Loan amount take has increased over the years across the income groups. This might be due to inflation
+2. Dip in loan about across all income 2009-2010. 
+3. Higher the income group higher the average loan amount
+4. Higher the income group more variance in the loan amount.
+
+
+**Loan Year, Loan Amount, Type of Borrower**
+```{r}
+ggplot(prosperSubSet, aes(LoanTakenYear, LoanOriginalAmount, fill = factor(DefaultBorrowers))) +
+  geom_boxplot() +
+  facet_grid(IncomeRange ~ .)+
+  scale_y_continuous(limits = c(0,25000))+
+  scale_fill_discrete(breaks = c(0,1), labels = c("Good Borrowers", "Bad Borrowers"))
+```
+
+Observations
+1. Higgher average loan amount take by bad borrowers till 2010
+2. Lower average loan amount by bad borrowers post 2010
+3. No bad borrowes in 2014 (incomplete data??)
+
+
+##
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
 
