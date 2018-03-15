@@ -1,0 +1,6 @@
+To run the project
+1. Keep all the files in one directory. Datasets also should be in that directory.
+2. Run proj3.m only
+3. proj3.m calls other programs.
+4. The project has to be trained again.
+4. The project takes long time for processing.

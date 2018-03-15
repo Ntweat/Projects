@@ -1,0 +1,152 @@
+ 
+  Printing the Confusion Matrices 
+ 
+For dataset A 
+
+ 
+NN on Bitmaps of sample 
+Classfied as		a	  c	  e	  m	  n	  o	  r	  s	  x	  z 	 Type I Error
+True Class 
+a                       10         0       0       0       0       0       0       0       0       0           0       
+c                       0         10       0       0       0       0       0       0       0       0           0       
+e                       0         0       10       0       0       0       0       0       0       0           0       
+m                       0         0       0       10       0       0       0       0       0       0           0       
+n                       0         0       0       0       10       0       0       0       0       0           0       
+o                       0         0       0       0       0       10       0       0       0       0           0       
+r                       0         0       0       0       0       0       10       0       0       0           0       
+s                       0         0       0       0       0       0       0       10       0       0           0       
+x                       0         0       0       0       0       0       0       0       10       0           0       
+z                       0         0       0       0       0       0       0       0       0       10           0       
+
+Type II Error            0       0       0       0       0       0       0       0       0       0                
+
+ 
+5-NN on Bitmaps of sample 
+Classfied as		a	  c	  e	  m	  n	  o	  r	  s	  x	  z 	 Type I Error
+True Class 
+a                       10         0       0       0       0       0       0       0       0       0           0       
+c                       0         10       0       0       0       0       0       0       0       0           0       
+e                       0         0       10       0       0       0       0       0       0       0           0       
+m                       0         0       0       10       0       0       0       0       0       0           0       
+n                       0         0       0       0       10       0       0       0       0       0           0       
+o                       0         0       0       0       0       10       0       0       0       0           0       
+r                       0         0       0       0       0       0       10       0       0       0           0       
+s                       0         0       0       0       0       0       0       10       0       0           0       
+x                       0         0       0       0       0       0       0       0       10       0           0       
+z                       0         0       0       0       0       0       0       0       0       10           0       
+
+Type II Error            0       0       0       0       0       0       0       0       0       0                
+For dataset B 
+
+ 
+NN on Bitmaps of sample 
+Classfied as		a	  c	  e	  m	  n	  o	  r	  s	  x	  z 	 Type I Error
+True Class 
+a                       2         0       0       0       8       0       0       0       0       0           8       
+c                       0         10       0       0       0       0       0       0       0       0           0       
+e                       0         0       3       0       0       7       0       0       0       0           7       
+m                       0         0       0       9       1       0       0       0       0       0           1       
+n                       0         0       0       0       10       0       0       0       0       0           0       
+o                       0         0       0       0       0       10       0       0       0       0           0       
+r                       0         0       0       0       0       0       2       0       0       8           8       
+s                       10         0       0       0       0       0       0       0       0       0           10       
+x                       0         0       0       0       0       0       0       0       10       0           0       
+z                       0         0       0       0       0       0       0       0       0       10           0       
+
+Type II Error            10       0       0       0       9       7       0       0       0       8                
+
+ 
+5-NN on Bitmaps of sample 
+Classfied as		a	  c	  e	  m	  n	  o	  r	  s	  x	  z 	 Type I Error
+True Class 
+a                       2         0       0       0       8       0       0       0       0       0           8       
+c                       0         10       0       0       0       0       0       0       0       0           0       
+e                       0         0       1       0       0       9       0       0       0       0           9       
+m                       0         0       0       10       0       0       0       0       0       0           0       
+n                       0         0       0       0       10       0       0       0       0       0           0       
+o                       0         1       0       0       0       9       0       0       0       0           1       
+r                       0         0       0       0       0       0       3       0       0       7           7       
+s                       10         0       0       0       0       0       0       0       0       0           10       
+x                       0         0       0       0       0       0       0       0       10       0           0       
+z                       0         0       0       0       0       0       0       0       0       10           0       
+
+Type II Error            10       1       0       0       8       9       0       0       0       7                
+For dataset C 
+
+ 
+NN on Bitmaps of sample 
+Classfied as		a	  c	  e	  m	  n	  o	  r	  s	  x	  z 	 Type I Error
+True Class 
+a                       10         0       0       0       0       0       0       0       0       0           0       
+c                       0         9       1       0       0       0       0       0       0       0           1       
+e                       0         0       10       0       0       0       0       0       0       0           0       
+m                       0         0       0       10       0       0       0       0       0       0           0       
+n                       0         0       0       0       10       0       0       0       0       0           0       
+o                       0         0       0       0       0       10       0       0       0       0           0       
+r                       0         0       0       0       0       0       10       0       0       0           0       
+s                       0         0       0       0       0       0       0       10       0       0           0       
+x                       0         0       0       0       0       0       0       0       10       0           0       
+z                       0         0       0       0       0       0       0       0       0       10           0       
+
+Type II Error            0       0       1       0       0       0       0       0       0       0                
+
+ 
+5-NN on Bitmaps of sample 
+Classfied as		a	  c	  e	  m	  n	  o	  r	  s	  x	  z 	 Type I Error
+True Class 
+a                       10         0       0       0       0       0       0       0       0       0           0       
+c                       0         10       0       0       0       0       0       0       0       0           0       
+e                       0         0       10       0       0       0       0       0       0       0           0       
+m                       0         0       0       10       0       0       0       0       0       0           0       
+n                       0         0       0       0       10       0       0       0       0       0           0       
+o                       0         0       0       0       0       10       0       0       0       0           0       
+r                       0         0       0       0       0       0       10       0       0       0           0       
+s                       0         0       0       0       0       0       0       10       0       0           0       
+x                       0         0       0       0       0       0       0       0       10       0           0       
+z                       0         0       0       0       0       0       0       0       0       10           0       
+
+Type II Error            0       0       0       0       0       0       0       0       0       0                
+For dataset D 
+
+ 
+NN on Bitmaps of sample 
+Classfied as		a	  c	  e	  m	  n	  o	  r	  s	  x	  z 	 Type I Error
+True Class 
+a                       10         0       0       0       0       0       0       0       0       0           0       
+c                       0         10       0       0       0       0       0       0       0       0           0       
+e                       0         2       8       0       0       0       0       0       0       0           2       
+m                       0         0       0       10       0       0       0       0       0       0           0       
+n                       0         0       0       0       10       0       0       0       0       0           0       
+o                       0         0       0       0       0       10       0       0       0       0           0       
+r                       0         0       0       0       0       0       10       0       0       0           0       
+s                       0         0       0       0       0       0       0       10       0       0           0       
+x                       0         0       0       0       0       0       0       0       10       0           0       
+z                       0         0       0       0       0       0       0       0       0       10           0       
+
+Type II Error            0       2       0       0       0       0       0       0       0       0                
+
+ 
+5-NN on Bitmaps of sample 
+Classfied as		a	  c	  e	  m	  n	  o	  r	  s	  x	  z 	 Type I Error
+True Class 
+a                       10         0       0       0       0       0       0       0       0       0           0       
+c                       0         10       0       0       0       0       0       0       0       0           0       
+e                       0         3       7       0       0       0       0       0       0       0           3       
+m                       0         0       0       10       0       0       0       0       0       0           0       
+n                       0         0       0       0       10       0       0       0       0       0           0       
+o                       0         1       0       0       0       9       0       0       0       0           1       
+r                       0         0       0       0       0       0       10       0       0       0           0       
+s                       0         0       0       0       0       0       0       10       0       0           0       
+x                       0         0       0       0       0       0       0       0       10       0           0       
+z                       0         0       0       0       0       0       0       0       0       10           0       
+
+Type II Error            0       4       0       0       0       0       0       0       0       0                
+ 
+ 
+ Test Method                 A        B        C       D 
+    1                       0       34       1      2 
+    2                       0       35       0      4 
+    3                       0       25       8      23 
+    4                       1       21       8      29 
+ 
+
